@@ -17,7 +17,6 @@
 			<li>VeryBadEtsy.com delivers search results</li>
 			<li>User clicks <em>favorite</em> on product.</li>
 			<li>VeryBadEtsy.com adds product to User's <em>favorited items</em></li>
-
 		</ol>
 
 	</main>
