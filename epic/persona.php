@@ -3,6 +3,7 @@
 <title>data-design persona</title>
 </head>
 <body>
+	<p><h1>Persona</h1></p>
 	<p><img src="https://bootcamp-coders.cnm.edu/~mharrison13/data-design/public_html/images/emanuel.png"</p>
 	<p><strong>Name:</strong> Emanuel R. Lombard<br>
 		<strong>Age:</strong> 70</p>
