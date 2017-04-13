@@ -17,13 +17,13 @@
 		</ul>
 		<p><strong>Favorite</strong></p>
 	<ul>
-		<li>favoriteID</li>
-		<li>favoriteProfileID</li>
+		<li>favoriteID (primary key)</li>
+		<li>favoriteProfileID (foreign key)</li>
 		<li>favoriteDate</li>
 </ul>
 		<p><strong>Relations</strong></p>
 		<ul>
-			<li>One <strong>Profile </strong>favorites product - (m to n)</li>
+			<li>One <strong>Profile </strong>favorites products - (1 to n)</li>
 		</ul>
 	</main>
 </body>
