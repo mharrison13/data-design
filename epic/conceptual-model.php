@@ -18,7 +18,8 @@
 		<p>Product</p>
 		<ul>
 			<li>productId</li>
-			<li>product</li>
+			<li>productProfileId</li>
+			<li>productPrice</li>
 		</ul>
 		<p><strong>Favorite</strong></p>
 	<ul>
