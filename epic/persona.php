@@ -12,5 +12,5 @@
 	<br>
 	<p><strong>Attitudes and Behavior: </strong>Retired with plenty of time on his hands, Emanuel is very technically savy for a 70 year old. His videos often go viral with his in-depth reviews of online purchases. He spends much of his time looking for new places to purchase his next video review. Emanuel is not very organized and often has a hard time remembering many of the items he comes across and relies heavily on the ability to save, bookmark and favorite the items he comes across.</p>
 	<br>
-	<p><strong>Frustrations and Needs: </strong></p>
+	<p><strong>Frustrations and Needs: </strong> Emanuel needs a way to favorite items of interest on <em>Very Bad Etsy</em> as he has no way of keeping track potential products for his video reviews. He also wants to build his </p>
 </body>
