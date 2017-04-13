@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 	<head>
-		<title>test</title>
+		<title>Very Bad Etsy</title>
 	</head>
 	<body>
-		<main>test</main>
+
 	</body>
