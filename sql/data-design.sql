@@ -10,7 +10,7 @@ CREATE TABLE profile (
 	profileAtHandle VARCHAR(32) NOT NULL,
 	profileEmail VARCHAR (128) NOT NULL,
 	profileHash CHAR (128) NOT NULL,
-	profilePhone (32),
+	profilePhone VARCHAR (32),
 	profileSalt CHAR (64) NOT NULL,
 	UNIQUE (profileEmail),
 	UNIQUE (profileAtHandle),
