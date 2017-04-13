@@ -28,7 +28,7 @@
 </ul>
 		<p><strong>Relations</strong></p>
 		<ul>
-			<li>One <strong>Profile </strong>favorites products - (1 to n)</li>
+			<li>One <strong>Profile </strong>favorites products - (m to n)</li>
 		</ul>
 	</main>
 </body>
