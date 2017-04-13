@@ -16,7 +16,7 @@
 			<li>user searches product</li>
 			<li>VeryBadEtsy.com delivers search results</li>
 			<li>User clicks <em>favorite</em> on product.</li>
-			<li>Product is added to Users <em>favorited items</em></li>
+			<li>VeryBadEtsy.com adds product to User's <em>favorited items</em></li>
 
 		</ol>
 
