@@ -11,7 +11,7 @@
 		<p>With a very large following, Emanuel also wants his followers to have access to the products he has selected to favorite on <em>Very Bad Etsy</em>.</p>
 		<h2>Interaction Flow</h2>
 		<ol>
-			<li>log into site</li>
+			<li>User logs into site</li>
 			<li>VeryBadEtsy.com delivers profile landing page</li>
 			<li>user searches product</li>
 			<li>VeryBadEtsy.com delivers search results</li>
