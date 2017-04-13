@@ -15,6 +15,11 @@
 		<li>profilePhone</li>
 		<li>profileSalt</li>
 		</ul>
+		<p>Product</p>
+		<ul>
+			<li>productId</li>
+			<li>product</li>
+		</ul>
 		<p><strong>Favorite</strong></p>
 	<ul>
 		<li>favoriteID (primary key)</li>
