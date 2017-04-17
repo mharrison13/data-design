@@ -12,25 +12,25 @@ CREATE TABLE profile (
 	profileSalt CHAR(64) NOT NULL,
 	UNIQUE(profileEmail),
 	UNIQUE(profileAtHandle),
-	PRIMARY KEY(profileID)
+	PRIMARY KEY(profileId)
 );
 
 CREATE TABLE product (
 	productId INT UNSIGNED AUTO_INCREMENT NOT NULL,
-	productProfileID INT UNSIGNED NOT NULL,
+	productProfileId INT UNSIGNED NOT NULL,
 	productPrice VARCHAR(32),
-	INDEX(productProfileID),
+	INDEX(productProfileId),
 	FOREIGN KEY(productProfileId) REFERENCES profile(profileId),
-	PRIMARY KEY(productID)
+	PRIMARY KEY(productId)
 );
 
 CREATE TABLE favorite (
-	favoriteID INT UNSIGNED NOT NUll,
-	favoriteProfileID INT UNSIGNED NOT NULL,
+	favoriteId INT UNSIGNED NOT NUll,
+	favoriteProfileId INT UNSIGNED NOT NULL,
 	favoriteDate DATETIME(6) NOT NULL,
-	INDEX(favoriteID),
-	INDEX(favoriteProfileID),
-	FOREIGN KEY(favoriteID) REFERENCES profile(profileID),
-	FOREIGN KEY(favoriteProfileID) REFERENCES product(productID),
-	PRIMARY KEY(favoriteID, favoriteProfileID)
+	INDEX(favoriteId),
+	INDEX(favoriteProfileId),
+	FOREIGN KEY(favoriteId) REFERENCES profile(profileId),
+	FOREIGN KEY(favoriteProfileId) REFERENCES product(productId),
+	PRIMARY KEY(favoriteId, favoriteProfileId)
 );
