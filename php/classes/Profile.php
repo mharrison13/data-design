@@ -1,5 +1,4 @@
 <?php
-require_once("autoload.php");
 /**
  * Profile Class for Very Bad Etsy
  *
@@ -8,7 +7,7 @@ require_once("autoload.php");
  * @author Michael Harrison <mharrison13@cnm.edu>
  * @version 0.0.1
  **/
-class Profile implements \JsonSerializable {
+class Profile {
 	/**
 	 * id for this Profile; this is the primary key
 	 * @var int $profileId
@@ -74,7 +73,6 @@ class Profile implements \JsonSerializable {
 		// convert and store the profile id
 		$this->profileId = $newProfileId;
 	}
-
 	/*
 	 * accessor method for profile activation token
 	 *
@@ -83,7 +81,6 @@ class Profile implements \JsonSerializable {
 	public function getProfileActivationToken(): string {
 		return ($this->profileActivationToken);
 	}
-
 	/**
 	 * mutator method for profile activation token
 	 *
@@ -109,7 +106,7 @@ class Profile implements \JsonSerializable {
 		}
 		//store the hash
 		$this->profileActivationToken = $newProfileActivationToken;
-
+	}
 	//store the activation token
 		//$this->profileActivationToken = $newProfileActivationToken;
 
@@ -123,8 +120,6 @@ public
 function getProfileAtHandle(): string {
 	return ($this->profileAtHandle);
 	}
-
-	//i think i need a brace here
 
 	/**
 	 * mutator method for at handle
@@ -168,11 +163,131 @@ function getProfileAtHandle(): string {
 	 * @throws \InvalidArgumentException if $newEmail is not a valid email or insecure
 	 * @throws \RangeException if $newEmail is > 128 characters
 	 * @throws \TypeError if $newEmail is not a string
-	 */
-	public
-	function setProfileEmail(string $newProfileEmail); {
+	 **/
+	public function setProfileEmail(string $newProfileEmail): void {
+		// verify the email is secure
+		$newProfileEmail = trim($newProfileEmail);
+		$newProfileEmail = filter_var($newProfileEmail, FILTER_VALIDATE_EMAIL);
+		if(empty($newProfileEmail) === true) {
+			throw(new \InvalidArgumentException("profile email is empty or insecure"));
+		}
+		// verify the email will fit in the database
+		if(strlen($newProfileEmail) > 128) {
+			throw(new \RangeException("profile email too long"));
+		}
+		// store the email
+		$this->profileEmail = $newProfileEmail;
 	}
-}
 
+	/**
+	 * accessor method for the profile hash
+	 *
+	 * @return string value of hash
+	 */
+
+	public function getProfileHash(): string {
+		return $this->profileHash;
+	}
+	/**
+	 * mutator method for profile hash password
+	 *
+	 * @param string $newProfileHash
+	 * @throws \InvalidArgumentException if the hash has is not secure
+	 * @throws \RangeException if the hass is not 128 characters
+	 * @throws \TypeError if profile hash is not 128 characters
+	 */
+	public function setProfileHash(string $newProfileHash): void {
+		//enforce that the has is properly formatted
+		$newProfileHash = trim($newProfileHash);
+		$newProfileHash = strtolower($newProfileHash);
+		if(empty($newProfileHash) === true) {
+			throw(new \InvalidArgumentException("profile hash empty or insecure"));
+		}
+
+		//enforce that the hash is a string representation of a hexadecimal
+		if(!ctype_xdigit($newProfileHash)) {
+			throw(new \RangeException("profile hash must be 128 character"));
+		}
+
+		//enforce that the hash is exactly 128 characters
+		if(strlen($newProfileHash) !==128) {
+			throw(new \RangeException("profile hash must be 128 characters"));
+		}
+
+		//store the hash
+		$this->profileHash = $newProfileHash;
+	}
+
+	/**
+	 * accessor method for phone
+	 *
+	 * @return string value of phone or null
+	 */
+	public function getProfilePhone(): ?string {
+		return ($this->profilePhone);
+	}
+
+	/**
+	 * mutator method for phone number
+	 *
+	 * @param string $newProfilePhone new value of phone
+	 * @throws \InvalidArgumentException if the $newPhone is not a string or insecure
+	 * @throws \RangeException if the $newPhone is > 32 characters
+	 * @throws \TypeError if $newPhone is not a string
+	 */
+
+	public function setProfilePhone(?string $newProfilePhone) {
+		//if $profilePhone is null return it right away
+		if($newProfilePhone === null) {
+			$this->profilePhone = null;
+			return;
+		}
+
+		// verify the phone is secure
+		$newProfilePhone = trim($newProfilePhone);
+		$newProfilePhone = filter_var($newProfilePhone, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newProfilePhone) === true ) {
+			throw(new \InvalidArgumentException("profile phone is empty or insecure"));
+		}
+
+		// verify the phone will fit in the database
+		if(strlen($newProfilePhone) > 32) {
+			throw(new \InvalidArgumentException("profile phone is too large"))
+		}
+
+		/**
+		 * accessor method for salt
+		 *
+		 * @return string representation of the salt hexadecimal
+		 */
+		public function getProfileSalt(): string {
+			return $this->profileSalt;
+		}
+		/**
+		 * mutator method for profile salt
+		 *
+		 * @param string $newProfileSalt
+		 * @throws \InvalidArgumentException if the salt is not secure
+		 * @throws \RangeException if the salt is > 64 characters
+		 * @throws \TypeError if the salt is not a string
+		 */
+		public function setProfileSalt(string $newProfileSalt): void {
+			//enforce that the salt is properly formatted
+			$newProfileSalt = trim($newProfileSalt);
+			$newProfileSalt = strlen($newProfileSalt);
+
+			//enforce that the salt is properly formatted
+			if(!ctype_xdigit($newProfileSalt)) {
+				throw(new \InvalidArgumentException("profile password hash is empty or insecure"));
+			}
+
+			//enforce that the salt length is exactly 64 characters
+			if(strlen($newProfileSalt) !==64) {
+				throw(new \RangeException("profile salt must be 64 characters"))
+			}
+		}
+
+
+	}
 }
 
