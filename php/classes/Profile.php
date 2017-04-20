@@ -1,4 +1,6 @@
 <?php
+
+require("autoload.php");
 /**
  * Profile Class for Very Bad Etsy
  *
@@ -101,7 +103,7 @@ class Profile {
 			throw(new \InvalidArgumentException("profile activation token is empty or insecure"));
 		}
 		//enforce that the activation token is exactly 32 characters.
-		if(strlen($newProfileHash) !== 32) {
+		if(strlen($newProfileActivationToken) !== 32) {
 			throw(new \RangeException("profile activation token must be 32 characters"));
 		}
 		//store the hash
@@ -252,17 +254,18 @@ function getProfileAtHandle(): string {
 
 		// verify the phone will fit in the database
 		if(strlen($newProfilePhone) > 32) {
-			throw(new \InvalidArgumentException("profile phone is too large"))
+			throw(new \InvalidArgumentException("profile phone is too large"));
 		}
 
 		/**
 		 * accessor method for salt
 		 *
 		 * @return string representation of the salt hexadecimal
-		 */
+		 **/
 		public function getProfileSalt(): string {
 			return $this->profileSalt;
 		}
+
 		/**
 		 * mutator method for profile salt
 		 *
@@ -270,7 +273,7 @@ function getProfileAtHandle(): string {
 		 * @throws \InvalidArgumentException if the salt is not secure
 		 * @throws \RangeException if the salt is > 64 characters
 		 * @throws \TypeError if the salt is not a string
-		 */
+		 **/
 		public function setProfileSalt(string $newProfileSalt): void {
 			//enforce that the salt is properly formatted
 			$newProfileSalt = trim($newProfileSalt);
@@ -283,8 +286,11 @@ function getProfileAtHandle(): string {
 
 			//enforce that the salt length is exactly 64 characters
 			if(strlen($newProfileSalt) !==64) {
-				throw(new \RangeException("profile salt must be 64 characters"))
+				throw(new \RangeException("profile salt must be 64 characters"));
 			}
+
+			//store the hash
+			$this->profileSalt = $newProfileSalt;
 		}
 
 
