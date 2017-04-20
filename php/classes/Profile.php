@@ -1,5 +1,5 @@
 <?php
-
+namespace VerybadetsyHttp\DataDesign;
 require("autoload.php");
 /**
  * Profile Class for Very Bad Etsy
@@ -10,6 +10,7 @@ require("autoload.php");
  * @version 0.0.1
  **/
 class Profile {
+	use ValidateDate;
 	/**
 	 * id for this Profile; this is the primary key
 	 * @var int $profileId
@@ -155,7 +156,7 @@ function getProfileAtHandle(): string {
 	 * @return string value of the user email
 	 */
 	public function getProfileEmail(): string {
-		return $this->profileEmail;
+		return ($this->profileEmail);
 	}
 
 	/**
@@ -188,7 +189,7 @@ function getProfileAtHandle(): string {
 	 */
 
 	public function getProfileHash(): string {
-		return $this->profileHash;
+		return ($this->profileHash);
 	}
 	/**
 	 * mutator method for profile hash password
@@ -248,7 +249,7 @@ function getProfileAtHandle(): string {
 		// verify the phone is secure
 		$newProfilePhone = trim($newProfilePhone);
 		$newProfilePhone = filter_var($newProfilePhone, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newProfilePhone) === true ) {
+		if(empty($newProfilePhone) === true) {
 			throw(new \InvalidArgumentException("profile phone is empty or insecure"));
 		}
 
@@ -257,13 +258,19 @@ function getProfileAtHandle(): string {
 			throw(new \InvalidArgumentException("profile phone is too large"));
 		}
 
+		// store the phone
+		$this->profilePhone = $newProfilePhone;
+
+	}
+
+
 		/**
 		 * accessor method for salt
 		 *
 		 * @return string representation of the salt hexadecimal
 		 **/
 		public function getProfileSalt(): string {
-			return $this->profileSalt;
+			return ($this->profileSalt);
 		}
 
 		/**
@@ -291,9 +298,6 @@ function getProfileAtHandle(): string {
 
 			//store the hash
 			$this->profileSalt = $newProfileSalt;
-		}
-
 
 	}
 }
-
