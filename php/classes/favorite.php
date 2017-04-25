@@ -131,13 +131,58 @@ class Favorite implements \JsonSerializable {
 		}
 		//store the like date using the ValidateDate trait
 		try {
-			$newFavoriteDate = self::validateDateTime($newFavoriteDate);
+			$newFavoriteDate = self::ValidateDate($newFavoriteDate);
 		} catch(\InvalidArgumentException | \RangeException $exception) {
 			$exceptionType = get_class($exception);
 			throw(new $exceptionType($exception->getMessage(), 0, $exception));
 		}
 		$this->favoriteDate = $newFavoriteDate;
 	}
+
+	/**
+	 * inserts this Favorite into mySQL
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a PDO connection object
+	 **/
+	public function insert(\PDO $pdo) : void {
+		//enforce the favoriteProductId is null (i.e., don't insert a favorite that already has a favorite)
+		if($this->favoriteProductId !== null) {
+			throw(new \PDOException("this already has a favorite"));
+		}
+		// create query template
+		$query = "INSERT INTO favorite(favoriteProductId, favoriteProfileId, favoriteDate) VALUES(:favoriteProductId, :favoriteProfileId, favoriteDate)";
+		$statement = $pdo->prepare($query);
+		// bind the member variables to the place holders in the template
+		$formattedDate = $this->favoriteDate->format("Y-m-d H:i:s");
+		$paramater = ["favoriteProductId" => $this->favoriteProductId, "favoriteProfileId" => $this->favoriteProfileId, "favoriteDate" => $formattedDate];
+		$statement->execute($parameters);
+		// update the null favoriteProductId with what mySQL just gave us
+		$this->favoriteProductId = intval($pdo->lastInsertId());
+	}
+
+	/**
+	 * deletes this favorite from mySQL
+	 *
+	 * @param \PDO $pdo PDO connections object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a PDO connection object
+	 **/
+	public function delete(\PDO $pdo) : void {
+		//enforce the favoriteProductId is not null (i.e., don't unfavorite a favorite that does not exist)
+		if($this->favoriteProductId === null) {
+			throw(new \PDOException("no favorite exists to remove"));
+		}
+		// create query template
+		$query = "DELETE FROM favorite WHERE favoriteProductId = :favoriteProductId";
+		$statement = $pdo->prepare($query);
+		// bind the member variables to the place holder in the template
+		$parameters = ["favoriteProductId" => $this->favoriteProductId];
+		$statement->execute($parameters);
+	}
+
+
 
 
 	/**
