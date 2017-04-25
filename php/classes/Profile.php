@@ -308,7 +308,7 @@ function getProfileAtHandle(): string {
 	public function jsonSerialize() {
 		$fields = get_object_vars($this);
 		//format the date so that the front end can consume it
-		//$fields["favoriteDate"] = round(floatval($this->favoriteDate->format("U.u")) * 1000);
+		//$fields["favoriteDate"] = round(float val($this->favoriteDate->format("U.u")) * 1000);
 		return($fields);
 	}
 

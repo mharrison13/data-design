@@ -25,9 +25,9 @@ class Favorite implements \JsonSerializable {
 
 	/**
 	 * id for dateTime
-	 * @var \dateTime $dateTime
+	 * @var \dateTime $favoriteDate
 	 **/
-	private $FavoriteDate;
+	private $favoriteDate;
 
 	/**
 	 * constructor for this favorite
@@ -88,7 +88,7 @@ class Favorite implements \JsonSerializable {
 	 * accessor method for favoriteProfileId
 	 *
 	 * @return int value of favorite profile id
-	 */
+	 **/
 	public function getFavoriteProfileId() : int {
 		return($this->favoriteProfileId);
 	}
@@ -98,10 +98,47 @@ class Favorite implements \JsonSerializable {
 	 * @param int $newFavoriteProfileId new value for favorite profile Id
 	 * @throws \RangeException if $newFavoriteProfileId is not positive
 	 * @throws \TypeError if $newFavoriteProfileId is not an integer
-	 */
+	 **/
 	public function setFavoriteProfileId(int $newFavoriteProfileId) : void {
 		//verify the favorite profile id is positive
+		if($newFavoriteProfileId <=0) {
+			throw (new \RangeException("Profile Id is not positive"));
+		}
+		// convert and store the favorite profile id
+		$this->favoriteProfileId = $newFavoriteProfileId;
 	}
+
+	/**
+	 * accessor method for favorite date
+	 *
+	 * @return \DateTime value of favorite date
+	 **/
+	public function getFavoriteDate() : \DateTime {
+		return($this->favoriteDate);
+	}
+	/**
+	 * mutator method for favoriteDate
+	 *
+	 * @param \DateTime|string|null $newFavoriteDate favorite date as a DateTime object or string (or null to load the current time)
+	 * @throws \InvalidArgumentException if $newFavoriteDate is not a valid object or string
+	 * @throws \RangeException if $newFavoriteDate is a date that does not exist
+	 **/
+	public function setFavoriteDate($newFavoriteDate = null) : void {
+		// base case: if the date is null, use the current date and time
+		if($newFavoriteDate === null) {
+			$this->favoriteDate = new \DateTime();
+			return;
+		}
+		//store the like date using the ValidateDate trait
+		try {
+			$newFavoriteDate = self::validateDateTime($newFavoriteDate);
+		} catch(\InvalidArgumentException | \RangeException $exception) {
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+		}
+		$this->favoriteDate = $newFavoriteDate;
+	}
+
 
 	/**
 	 * formats the state variables for JSON serialization
@@ -111,7 +148,7 @@ class Favorite implements \JsonSerializable {
 	public function jsonSerialize() {
 		$fields = get_object_vars($this);
 		//format the date so that the front end can consume it
-		//$fields["favoriteDate"] = round(floatval($this->favoriteDate->format("U.u")) * 1000);
+		$fields["favoriteDate"] = round(floatval($this->favoriteDate->format("U.u")) * 1000);
 		return($fields);
 	}
 }
