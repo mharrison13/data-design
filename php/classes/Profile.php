@@ -10,7 +10,6 @@ require("autoload.php");
  * @version 0.0.1
  **/
 class Profile implements \JsonSerializable {
-	use ValidateDate;
 	/**
 	 * id for this Profile; this is the primary key
 	 * @var int $profileId
@@ -300,4 +299,17 @@ function getProfileAtHandle(): string {
 			$this->profileSalt = $newProfileSalt;
 
 	}
+
+	/**
+	 * formats the state variables for JSON serialization
+	 *
+	 * @return array resulting state variables to serialize
+	 **/
+	public function jsonSerialize() {
+		$fields = get_object_vars($this);
+		//format the date so that the front end can consume it
+		//$fields["favoriteDate"] = round(floatval($this->favoriteDate->format("U.u")) * 1000);
+		return($fields);
+	}
+
 }

@@ -9,7 +9,7 @@ require("autoload.php");
  * @author Michael Harrison <mharrison13@cnm.edu>
  * @version 0.0.1
  **/
-class product file implements \JsonSerializable {
+class Product implements \JsonSerializable {
 	/**
 	 * id for this Product; this is the primary key
 	 * @var int $productId
@@ -92,7 +92,7 @@ class product file implements \JsonSerializable {
 	/**
 	 * accessor method for product price
 	 *
-	 * @return value of $productPrice
+	 * @return string value of $productPrice
 	 **/
 	public function getProductPrice() : string {
 		return($this->productPrice);
@@ -119,6 +119,18 @@ class product file implements \JsonSerializable {
 
 		// store this product price
 		$this->productPrice = $newProductPrice;
+	}
+
+	/**
+	 * formats the state variables for JSON serialization
+	 *
+	 * @return array resulting state variables to serialize
+	 **/
+	public function jsonSerialize() {
+		$fields = get_object_vars($this);
+		//format the date so that the front end can consume it
+		//$fields["favoriteDate"] = round(floatval($this->favoriteDate->format("U.u")) * 1000);
+		return($fields);
 	}
 
 }
