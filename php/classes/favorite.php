@@ -156,7 +156,7 @@ class Favorite implements \JsonSerializable {
 		$statement = $pdo->prepare($query);
 		// bind the member variables to the place holders in the template
 		$formattedDate = $this->favoriteDate->format("Y-m-d H:i:s");
-		$paramater = ["favoriteProductId" => $this->favoriteProductId, "favoriteProfileId" => $this->favoriteProfileId, "favoriteDate" => $formattedDate];
+		$parameters = ["favoriteProductId" => $this->favoriteProductId, "favoriteProfileId" => $this->favoriteProfileId, "favoriteDate" => $formattedDate];
 		$statement->execute($parameters);
 		// update the null favoriteProductId with what mySQL just gave us
 		$this->favoriteProductId = intval($pdo->lastInsertId());
@@ -180,6 +180,43 @@ class Favorite implements \JsonSerializable {
 		// bind the member variables to the place holder in the template
 		$parameters = ["favoriteProductId" => $this->favoriteProductId];
 		$statement->execute($parameters);
+	}
+
+	/**
+	 * get favorite by favoriteId
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @param int $favoriteProductId favorite id to search for
+	 * @return favorite|null favorite found or null if not found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when variables are not the correct data type
+	 **/
+	public static function getFavoritebyFavoriteProductId(\PDO $pdo, int $favoriteProductId) : ?Favorite {
+		// sanitize the favoriteProductId before searching
+		if($favoriteProductId <=0) {
+			throw(new \PDOException("favoriteProductId is not positive"));
+		}
+		// create query template
+		$query = "SELECT favoriteProductId, favoriteProfileId, favoriteDate FROM favorite WHERE favoriteProductId = :favoriteProductId";
+		$statement = $pdo->prepare($query);
+		// bind the favorite profile id to the place holder in the template
+		$parameters = ["favoriteProductId" => $favoriteProductId];
+		$statement->execute($parameters);
+		// grab the favorite from mySQL
+		try {
+			$favorite = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false) {
+				$tweet = new Tweet($row["favoriteProductId"], $row["favoriteProfileId"], $row["favoriteDate"]);
+			}
+		} catch(\Exception $exception) {
+			//if the row could't be converted, rethrow it
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+		return($favorite);
+		
+
 	}
 
 
