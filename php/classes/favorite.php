@@ -9,7 +9,7 @@ require("autoload.php");
  * @author Michael Harrison <mharrison13@cnm.edu>
  * @version 0.0.1
  **/
-class Profile implements \JsonSerializable {
+class Favorite implements \JsonSerializable {
 	use ValidateDate;
 	/**
 	 * id for this favorite ProductId; this is a primary key
@@ -33,7 +33,7 @@ class Profile implements \JsonSerializable {
 	 * constructor for this favorite
 	 *
 	 * @param int|null $newFavoriteProductId of this favorite or null if a new favorite
-	 * @param int $newFavoriteProfileId id fo the profile that favorites an item
+	 * @param int $newFavoriteProfileId id for the profile that favorites an item
 	 * @param \dateTime | string | null $newFavoriteDate dat and time Favorite was sent
 	 * @throws \InvalidArgumentException if data types are not valid
 	 * @throws \TypeError if data types violate type hints
@@ -51,6 +51,14 @@ class Profile implements \JsonSerializable {
 			$exceptionType = get_class ($exception);
 			throw(new $exceptionType($exception->getMessage(), 0, $exception));
 		}
+	}
+
+	/**
+	 * accessor method for FavoriteProductId
+	 *
+	 * @return int|null value favorite product id
+	 **/
+	public function setFavoriteProductId(?int $newFavoriteProductId) : void {
 
 	}
 

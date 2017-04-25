@@ -9,7 +9,7 @@ require("autoload.php");
  * @author Michael Harrison <mharrison13@cnm.edu>
  * @version 0.0.1
  **/
-class favorite file implements \JsonSerializable {
+class product file implements \JsonSerializable {
 	/**
 	 * id for this Product; this is the primary key
 	 * @var int $productId
@@ -78,7 +78,7 @@ class favorite file implements \JsonSerializable {
 	public function setProductProfileId(int $newProductProfileId) : void {
 		//if product profile id is null immediately return it
 		if($newProductProfileId === null) {
-			$this->profileProductId = null;
+			$this->productProfileId = null;
 			return;
 		}
 		// verify the Product Profile Id is positive
@@ -92,7 +92,7 @@ class favorite file implements \JsonSerializable {
 	/**
 	 * accessor method for product price
 	 *
-	 * @return value of productPrice
+	 * @return value of $productPrice
 	 **/
 	public function getProductPrice() : string {
 		return($this->productPrice);
