@@ -23,7 +23,7 @@
 		</ul>
 		<p><strong>Favorite</strong></p>
 	<ul>
-		<li>favoriteID (primary key)</li>
+		<li>favoriteProductID (primary key)</li>
 		<li>favoriteProfileID (foreign key)</li>
 		<li>favoriteDate</li>
 </ul>

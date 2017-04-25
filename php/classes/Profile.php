@@ -9,7 +9,7 @@ require("autoload.php");
  * @author Michael Harrison <mharrison13@cnm.edu>
  * @version 0.0.1
  **/
-class Profile {
+class Profile implements \JsonSerializable {
 	use ValidateDate;
 	/**
 	 * id for this Profile; this is the primary key
