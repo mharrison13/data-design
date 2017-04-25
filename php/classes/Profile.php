@@ -259,9 +259,7 @@ function getProfileAtHandle(): string {
 
 		// store the phone
 		$this->profilePhone = $newProfilePhone;
-
 	}
-
 
 		/**
 		 * accessor method for salt
@@ -297,7 +295,21 @@ function getProfileAtHandle(): string {
 
 			//store the hash
 			$this->profileSalt = $newProfileSalt;
-
+	}
+	/**
+	 * inserts profilePhone into mySQL
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a PDO connection object
+	 **/
+	public function insert(\PDO $pdo) : void {
+		//enforce the phone var is null
+		if($this->profilePhone !== null) {
+			throw(new \RangeException("phone number already exists"));
+		}
+		// create query template
+		$query = "INSERT INTO email"
 	}
 
 	/**

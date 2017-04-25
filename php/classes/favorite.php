@@ -208,19 +208,14 @@ class Favorite implements \JsonSerializable {
 			$statement->setFetchMode(\PDO::FETCH_ASSOC);
 			$row = $statement->fetch();
 			if($row !== false) {
-				$tweet = new Tweet($row["favoriteProductId"], $row["favoriteProfileId"], $row["favoriteDate"]);
+				$favorite = new favorite($row["favoriteProductId"], $row["favoriteProfileId"], $row["favoriteDate"]);
 			}
 		} catch(\Exception $exception) {
 			//if the row could't be converted, rethrow it
 			throw(new \PDOException($exception->getMessage(), 0, $exception));
 		}
 		return($favorite);
-		
-
 	}
-
-
-
 
 	/**
 	 * formats the state variables for JSON serialization
