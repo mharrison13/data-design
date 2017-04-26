@@ -76,6 +76,29 @@ try {
 		}
 	}else if($method === "put" || $method === "post") {
 
+		verifyXsrf();
+		$requestContent = file_get_contents("php://input");
+		// Retrieves the JSON package that the front end sent, and stores it in $requestObject
+		$requestObject = json_decode($requestContent);
+		// This code will decode the JSON package and store it in the $requestObject
+
+		// Make sure the favorite is available (required field)
+		if(empty($requestObject->tweetContent) === true) {
+			throw(new InvalidArgumentException("favorite does not exist", 405));
+		}
+
+		// Make sure favorite date is accurate (optional field)
+		if(empty($requestObject->favoriteDate) === true) {
+			$requestObject->favoriteDate = null;
+		}
+
+		// Make sure profileId is available
+		if(empty($requestObject->favoriteProfileId) === true) {
+			$requestObject->favoriteProfileId = null;
+		}
+
+
+
 	}
 
 
