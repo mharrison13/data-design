@@ -6,7 +6,7 @@ require_once dirname(__DIR__, 3) . "php/lib/xsrd.php";
 require_once dirname("/etc/apache2/captstone0mysql/enrypted-config.php");
 
 use VerybadetsyHttp\DataDesign\{
-	Favorite,
+	Favorite
 };
 
 /**
@@ -83,7 +83,7 @@ try {
 		// This code will decode the JSON package and store it in the $requestObject
 
 		// Make sure the favorite is available (required field)
-		if(empty($requestObject->tweetContent) === true) {
+		if(empty($requestObject->favoriteProductId) === true) {
 			throw(new InvalidArgumentException("favorite does not exist", 405));
 		}
 
@@ -94,16 +94,82 @@ try {
 
 		// Make sure profileId is available
 		if(empty($requestObject->favoriteProfileId) === true) {
-			$requestObject->favoriteProfileId = null;
+			throw(new InvalidArgumentException("No Profile Id", 405));
 		}
 
+		//perform the actual put or post
+		if($method === "put") {
 
+			//enforce that the end user has a XSRF token.
+			verifyXsrf();
 
+			// retrieve that favorite is up to date
+			$favorite = Tweet::getFavoritebyFavoriteProductId($pdo, $id);
+			if($favorite === null) {
+				throw(new InvalidArgumentException("favorite does not exist", 404));
+			}
+
+			//enforce the user is signed in and only trying to change their own favorite
+			if(empty($_SESSION["profile"]) === true || $_SESSION["profile"]->getProfilId() !== $favorite->getFavoriteProfileId()) {
+				throw(new InvalidArgumentException("You are not allowed to edit this favorite", 403));
+			}
+
+			// update all favorites
+			$favorite->setFavoriteDate($requestObject->favoriteDate);
+			$favorite->setFavoriteProductId($requestObject->favoriteProfileId);
+			#favorite->update($pdo);
+
+			// update reply
+			$reply->message = "Favorite updated ok";
+
+		} else if($method === "POST") {
+
+			//enforce the user is signed in
+			if(empty($_SESSION["profile"]) === true) {
+				throw(new InvalidArgumentException("you must be logged in to add a favorite", 403));
+			}
+
+			//create a favorite and insert it into the database
+			$favorite = new Favorite(null, $requestObject->favoriteProfileId, $requestObject->FavoriteDate, null);
+			$favorite->insert($pdo);
+
+			//update reply
+			$reply->message = "favorite created OK";
+		}
+
+	} else if($method === "DELETE") {
+
+		//enforce that the end user has a XSRF token.
+		verifyXsrf();
+
+		//retrieve the favorite to be deleted
+		$favorite = Favorite::getFavoritebyFavoriteProductId($pdo, $id);
+		if($favorite === null) {
+			throw(new InvalidArgumentException("favorite does not exist", 404));
+		}
+
+		//enforce the user is signed in and only trying to edit their own favorite
+		if(empty($_SESSION["profile"]) === true || $_SESSION["profile"]->getProfileId() !== $favorite->getFavoriteProfileId()) {
+			throw(new InvalidArgumentException("you are not allowed to delete this favorite", 403));
+		}
+
+		//delete favorite
+		$favorite->delete($pdo);
+		//update reply
+		$reply->message = "Favorite Deleted OK";
+	} else {
+		throw(new InvalidArgumentException("Invalid HTTP method request"));
 	}
-
-
+	// update the $reply->status $reply->message
+} catch(\Exception | \TypeError $exception) {
+	$reply->status = $exception->getCode();
+	$reply->message = $exception->getMessage();
 }
 
-try {
-
+header("content-type: application/json");
+if($reply->data === null) {
+	unset($reply->data);
 }
+
+// encode and return reply to front end caller
+echo json_encode($reply);
