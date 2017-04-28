@@ -29,6 +29,31 @@ class Product implements \JsonSerializable {
 	private $productPrice;
 
 	/**
+	 * constructor for this Product
+	 *
+	 * @param int|null $newProductId for this product or null if a new Product
+	 * @param int $newProductProfileId of the Product created
+	 * @param string $newProductPrice string containing actual product price
+	 * @throws \InvalidArgumentException if data types are not valid
+	 * @throws \RangeException if data values are out of bounds (e.g., strings too long, negative integers)
+	 * @throws \TypeError if data types violate type hints
+	 * @throws \Exception if some other exception occurs
+	 * @Documentation https://php.net/manual/en/language.oop5.decon.php
+	 **/
+	public function __construct(?int $newProductId, int $newProductProfileId, string $newProductPrice) {
+		try {
+			$this->setProductId($newProductId);
+			$this->setProductProfileId($newProductProfileId);
+			$this->setProductPrice($newProductPrice);
+		}
+			//determine what exception type was thrown
+		catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+		}
+	}
+
+	/**
 	 * constructor for this product
 	 *
 	 * @param int|null $newProductId of this product or null if a new favorite
