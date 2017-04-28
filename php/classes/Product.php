@@ -57,7 +57,7 @@ class Product implements \JsonSerializable {
 	 * constructor for this product
 	 *
 	 * @param int|null $newProductId of this product or null if a new favorite
-	 * @param int $newProfileId id for the profile that creates an item
+	 * @param int $newProductProfileId id for the profile that creates an item
 	 * @param int $newProductPrice id for the product that was created
 	 * @throws \InvalidArgumentException if data types are not valid
 	 * @throws \TypeError if data types violate type hints
