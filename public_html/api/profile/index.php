@@ -56,22 +56,27 @@ try {
 
 		//get a specific profile and update
 		if(empty($id) === false) {
-			$product - Profile::getProductByProductProfileId($pdo, $id);
+			$product - Profile::getProfileByProfileId($pdo, $id);
 			if($product !== null) {
 				$reply->data = $product;
 			}
 		} else if(empty($productProfileId) === false) {
-			$product = Profile::getProductByProductProfileId($pdo, $productProfileId)->toArray();
+			$product = Profile::getProfileByProfileAtHandle($pdo, $productProfileId)->toArray();
 			if($product !== null) {
 				$reply->data = $product;
 			}
 		} else if(empty($productPrice) === false) {
-			$product = Profile::getProductbyProductProfileId($pdo, $productPrice)->toArray();
+			$product = Profile::getProfilebyProfileEmail($pdo, $productPrice)->toArray();
+			if($product !== null) {
+				$reply->data = $product;
+			}
+		} else if(empty($productPrice) === false) {
+			$product = Profile::getProfilebyProfilePhone($pdo, $productPrice)->toArray();
 			if($product !== null) {
 				$reply->data = $product;
 			}
 		} else {
-			$product = Profile::getAllProducts($pdo)->toArray();
+			$product = Profile::getAllProfiles($pdo)->toArray();
 			if($product !== null) {
 				$reply->data = $product;
 			}
