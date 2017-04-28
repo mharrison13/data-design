@@ -6,7 +6,7 @@ require_once dirname(__DIR__, 3) . "php/lib/xsrd.php";
 require_once dirname("/etc/apache2/captstone0mysql/enrypted-config.php");
 
 use VerybadetsyHttp\DataDesign\{
-	Product
+	Profile
 };
 
 /**
@@ -54,24 +54,24 @@ try {
 		//set XSRF cookie
 		setXsrfCookie();
 
-		//get a specific product and update
+		//get a specific profile and update
 		if(empty($id) === false) {
-			$product - Product::getProductByProductProfileId($pdo, $id);
+			$product - Profile::getProductByProductProfileId($pdo, $id);
 			if($product !== null) {
 				$reply->data = $product;
 			}
 		} else if(empty($productProfileId) === false) {
-			$product = Product::getProductByProductProfileId($pdo, $productProfileId)->toArray();
+			$product = Profile::getProductByProductProfileId($pdo, $productProfileId)->toArray();
 			if($product !== null) {
 				$reply->data = $product;
 			}
 		} else if(empty($productPrice) === false) {
-			$product = Product::getProductbyProductProfileId($pdo, $productPrice)->toArray();
+			$product = Profile::getProductbyProductProfileId($pdo, $productPrice)->toArray();
 			if($product !== null) {
 				$reply->data = $product;
 			}
 		} else {
-			$product = Product::getAllProducts($pdo)->toArray();
+			$product = Profile::getAllProducts($pdo)->toArray();
 			if($product !== null) {
 				$reply->data = $product;
 			}
