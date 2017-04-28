@@ -82,9 +82,9 @@ try {
 		$requestObject = json_decode($requestContent);
 		// This code will decode the JSON package and store it in the $requestObject
 
-		// Make sure the favorite is available (required field)
-		if(empty($requestObject->favoriteProductId) === true) {
-			throw(new InvalidArgumentException("favorite does not exist", 405));
+		// Make sure the product is available (required field)
+		if(empty($requestObject->ProductId) === true) {
+			throw(new InvalidArgumentException("Product does not exist", 405));
 		}
 
 		// Make sure favorite date is accurate (optional field)
