@@ -47,6 +47,34 @@ class Profile implements \JsonSerializable {
 	private $profileSalt;
 
 	/**
+	 * constructor for profile
+	 *
+	 * @param int|null $newProfileId of this profile or null if a new profile
+	 * @param string $newProfileAtHandle for the profile that was created
+	 * @param string $newProfileEmail for the profile that was created
+	 * @param string $newProfilePhone for the profile that was created
+	 * @throws \InvalidArgumentException if data types are not valid
+	 * @throws \TypeError if data types violate type hints
+	 * @throws \Exception if some other exception occurs
+	 * @documentation https://php.net/manual/en/language.oop5.decon.php
+	 */
+
+	public function __construct(?int $newProfileId, int $newProfileAtHandle, string $newProfileEmail, string $newProfilePhone) {
+		try {
+			$this->setProfileId($newProfileId);
+			$this->setProfileAtHandle($newProfileAtHandle);
+			$this->setProfileEmail($newProfileEmail);
+			$this->setProfilePhone($newProfilePhone);
+
+		}
+			//determine what exception was thrown
+		catch(\InvalidArgumentException | \RangeException | \Exception | \Exception | \TypeError $exception) {
+			$exceptionType = get_class ($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+		}
+	}
+
+	/**
 	 * accessor method for profile id
 	 *
 	 * @return int|null value of profile id
