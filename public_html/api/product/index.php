@@ -39,8 +39,8 @@ try {
 
 	//sanitize input
 	$id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
-	$productProfileId = filter_input(INPUT_GET, "productProfileId", FILTER_VALIDATE_INT);
-	$productProductId = filter_input(INPUT_GET, "productProductId", FILTER_VALIDATE_INT);
+	$productProfileId = filter_input(INPUT_GET, "productId", FILTER_VALIDATE_INT);
+	$productPrice = filter_input(INPUT_GET, "productPrice", FILTER_VALIDATE_INT);
 
 	//make sure the id is valid for methods that require it
 	if(($method === "DELETE" || $method === "PUT") && (empty($id) === true || $id < 0)) {

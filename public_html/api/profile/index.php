@@ -6,7 +6,7 @@ require_once dirname(__DIR__, 3) . "php/lib/xsrd.php";
 require_once dirname("/etc/apache2/captstone0mysql/enrypted-config.php");
 
 use VerybadetsyHttp\DataDesign\{
-	Favorite
+	Product
 };
 
 /**
@@ -32,7 +32,7 @@ try {
 
 	// mock a logged in user by mocking the session and assigning a specific user to it.
 	// this is only for testing purposes and should not be in a live code.
-	//$_SESSION["profile"] = Profile::getProfileByProfileId($pdo, 732);
+	//$_SESSION["profile"] = Profile::getProductByProductProfileId($pdo, 732);
 
 	//determine which HTTP method was used
 	$method = array_key_exists("HTTP_X_HTTP_METHOD", $_SERVER) ? $_SERVER["HTTP_X_HTTP_METHOD"] : $_SERVER["REQUEST_METHOD"];
@@ -42,38 +42,38 @@ try {
 	$profileId = filter_input(INPUT_GET, "profileId", FILTER_VALIDATE_INT);
 	$profileAtHandle = filter_input(INPUT_GET, "profileAtHandle", FILTER_VALIDATE_INT);
 	$profileEmail = filter_input(INPUT_GET, "profileEmail", FILTER_VALIDATE_INT);
-	$profilePhone = filter_input(INPUT_GET, "profilePhone", FILTER_VALIDATE_INT);
+	$profilePhone = filter_input(INPUT_GET, profilePhone, FILTER_VALIDATE_INT);
 
 	//make sure the id is valid for methods that require it
 	if(($method === "DELETE" || $method === "PUT") && (empty($id) === true || $id < 0)) {
 		throw(new InvalidArgumentException("id cannot be empty or negative", 405));
 	}
 
-	// handle GET request - if id is present, that favorite is returned, otherwise all favorited items are returned
+	// handle GET request - if id is present, that product is returned, otherwise all products items are returned
 	if($method === "GET") {
 		//set XSRF cookie
 		setXsrfCookie();
 
-		//get a specific favorite of all favorited items and update reply
+		//get a specific product and update
 		if(empty($id) === false) {
-			$favorite - Favorite::getFavoritebyFavoriteProductId($pdo, $id);
-			if($favorite !== null) {
-				$reply->data = $favorite;
+			$product - Product::getProductByProductProfileId($pdo, $id);
+			if($product !== null) {
+				$reply->data = $product;
 			}
-		} else if(empty($favoriteProductId) === false) {
-			$favorite = Favorite::getFavoritebyFavoriteProfileId($pdo, $favoriteProfileId)->toArray();
-			if($favorite !== null) {
-				$reply->data = $favorite;
+		} else if(empty($productProfileId) === false) {
+			$product = Product::getProductByProductProfileId($pdo, $productProfileId)->toArray();
+			if($product !== null) {
+				$reply->data = $product;
 			}
-		} else if(empty($FavoriteDate) === false) {
-			$favorite = Favorite::getFavoritebyFavoriteDate($pdo, $favoriteDate)->toArray();
-			if($favorite !== null) {
-				$reply->data = $favorite;
+		} else if(empty($productPrice) === false) {
+			$product = Product::getProductbyProductProfileId($pdo, $productPrice)->toArray();
+			if($product !== null) {
+				$reply->data = $product;
 			}
 		} else {
-			$favorite = Favorite::getAllFavorites($pdo)->toArray();
-			if($favorite !== null) {
-				$reply->data = $favorite;
+			$product = Product::getAllProducts($pdo)->toArray();
+			if($product !== null) {
+				$reply->data = $product;
 			}
 		}
 	}else if($method === "put" || $method === "post") {
@@ -84,18 +84,18 @@ try {
 		$requestObject = json_decode($requestContent);
 		// This code will decode the JSON package and store it in the $requestObject
 
-		// Make sure the favorite is available (required field)
-		if(empty($requestObject->favoriteProductId) === true) {
-			throw(new InvalidArgumentException("favorite does not exist", 405));
+		// Make sure the product is available (required field)
+		if(empty($requestObject->ProductId) === true) {
+			throw(new InvalidArgumentException("Product does not exist", 405));
 		}
 
-		// Make sure favorite date is accurate (optional field)
-		if(empty($requestObject->favoriteDate) === true) {
-			$requestObject->favoriteDate = null;
+		// Make sure product price is accurate (optional field)
+		if(empty($requestObject->productPrice) === true) {
+			$requestObject->produntPrice = null;
 		}
 
 		// Make sure profileId is available
-		if(empty($requestObject->favoriteProfileId) === true) {
+		if(empty($requestObject->productProfileId) === true) {
 			throw(new InvalidArgumentException("No Profile Id", 405));
 		}
 
@@ -105,38 +105,38 @@ try {
 			//enforce that the end user has a XSRF token.
 			verifyXsrf();
 
-			// retrieve that favorite is up to date
-			$favorite = Favorite::getFavoritebyFavoriteProductId($pdo, $id);
-			if($favorite === null) {
-				throw(new InvalidArgumentException("favorite does not exist", 404));
+			// retrieve that product is up to date
+			$product = Product::getProductByProductProfileId($pdo, $id);
+			if($product === null) {
+				throw(new InvalidArgumentException("Product does not exist", 404));
 			}
 
-			//enforce the user is signed in and only trying to change their own favorite
-			if(empty($_SESSION["profile"]) === true || $_SESSION["profile"]->getProfilId() !== $favorite->getFavoriteProfileId()) {
-				throw(new InvalidArgumentException("You are not allowed to edit this favorite", 403));
+			//enforce the user is signed in and only trying to change their own product
+			if(empty($_SESSION["profile"]) === true || $_SESSION["profile"]->getProfilId() !== $product->getProductProfileId()) {
+				throw(new InvalidArgumentException("You are not allowed to edit this product", 403));
 			}
 
-			// update all favorites
-			$favorite->setFavoriteDate($requestObject->favoriteDate);
-			$favorite->setFavoriteProductId($requestObject->favoriteProfileId);
-			#favorite->update($pdo);
+			// update all products
+			$product->setProductPrice($requestObject->ProductPrice);
+			$product->setProductProfileId($requestObject->productProfileId);
+			#product->update($pdo);
 
 			// update reply
-			$reply->message = "Favorite updated ok";
+			$reply->message = "Product updated ok";
 
 		} else if($method === "POST") {
 
 			//enforce the user is signed in
 			if(empty($_SESSION["profile"]) === true) {
-				throw(new InvalidArgumentException("you must be logged in to add a favorite", 403));
+				throw(new InvalidArgumentException("you must be logged in to add a product", 403));
 			}
 
-			//create a favorite and insert it into the database
-			$favorite = new Favorite(null, $requestObject->favoriteProfileId, $requestObject->FavoriteDate, null);
-			$favorite->insert($pdo);
+			//create a product and insert it into the database
+			$Product = new Product(null, $requestObject->productProfileId, $requestObject->productPrice, null);
+			$Product->insert($pdo);
 
 			//update reply
-			$reply->message = "favorite created OK";
+			$reply->message = "product created OK";
 		}
 
 	} else if($method === "DELETE") {
@@ -144,21 +144,21 @@ try {
 		//enforce that the end user has a XSRF token.
 		verifyXsrf();
 
-		//retrieve the favorite to be deleted
-		$favorite = Favorite::getFavoritebyFavoriteProductId($pdo, $id);
-		if($favorite === null) {
-			throw(new InvalidArgumentException("favorite does not exist", 404));
+		//retrieve the product to be deleted
+		$product = Product::getProductbyProductProfileId($pdo, $id);
+		if($product === null) {
+			throw(new InvalidArgumentException("product does not exist", 404));
 		}
 
-		//enforce the user is signed in and only trying to edit their own favorite
-		if(empty($_SESSION["profile"]) === true || $_SESSION["profile"]->getProfileId() !== $favorite->getFavoriteProfileId()) {
-			throw(new InvalidArgumentException("you are not allowed to delete this favorite", 403));
+		//enforce the user is signed in and only trying to edit their own product
+		if(empty($_SESSION["profile"]) === true || $_SESSION["profile"]->getProductProfileId() !== $product->getProductProfileId()) {
+			throw(new InvalidArgumentException("you are not allowed to delete this product", 403));
 		}
 
-		//delete favorite
-		$favorite->delete($pdo);
+		//delete product
+		$product->delete($pdo);
 		//update reply
-		$reply->message = "Favorite Deleted OK";
+		$reply->message = "Product Deleted OK";
 	} else {
 		throw(new InvalidArgumentException("Invalid HTTP method request"));
 	}
