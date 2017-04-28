@@ -10,7 +10,7 @@ use VerybadetsyHttp\DataDesign\{
 };
 
 /**
- * api for the Favorite Class
+ * api for the Profile Class
  *
  * @author Valente Meza <valebmexa@gmail.com>
  * @co-author Michael Harrison <mharrison13@cnm.edu>
@@ -39,8 +39,10 @@ try {
 
 	//sanitize input
 	$id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
-	$favoriteProfileId = filter_input(INPUT_GET, "favoriteProfileId", FILTER_VALIDATE_INT);
-	$favoriteProductId = filter_input(INPUT_GET, "favoriteProductId", FILTER_VALIDATE_INT);
+	$profileId = filter_input(INPUT_GET, "profileId", FILTER_VALIDATE_INT);
+	$profileAtHandle = filter_input(INPUT_GET, "profileAtHandle", FILTER_VALIDATE_INT);
+	$profileEmail = filter_input(INPUT_GET, "profileEmail", FILTER_VALIDATE_INT);
+	$profilePhone = filter_input(INPUT_GET, "profilePhone", FILTER_VALIDATE_INT);
 
 	//make sure the id is valid for methods that require it
 	if(($method === "DELETE" || $method === "PUT") && (empty($id) === true || $id < 0)) {
@@ -104,7 +106,7 @@ try {
 			verifyXsrf();
 
 			// retrieve that favorite is up to date
-			$favorite = Tweet::getFavoritebyFavoriteProductId($pdo, $id);
+			$favorite = Favorite::getFavoritebyFavoriteProductId($pdo, $id);
 			if($favorite === null) {
 				throw(new InvalidArgumentException("favorite does not exist", 404));
 			}

@@ -104,7 +104,7 @@ try {
 			verifyXsrf();
 
 			// retrieve that favorite is up to date
-			$favorite = Tweet::getFavoritebyFavoriteProductId($pdo, $id);
+			$favorite = Favorite::getFavoritebyFavoriteProductId($pdo, $id);
 			if($favorite === null) {
 				throw(new InvalidArgumentException("favorite does not exist", 404));
 			}

@@ -10,7 +10,7 @@ use VerybadetsyHttp\DataDesign\{
 };
 
 /**
- * api for the Favorite Class
+ * api for the Product Class
  *
  * @author Valente Meza <valebmexa@gmail.com>
  * @co-author Michael Harrison <mharrison13@cnm.edu>
@@ -104,7 +104,7 @@ try {
 			verifyXsrf();
 
 			// retrieve that favorite is up to date
-			$favorite = Tweet::getFavoritebyFavoriteProductId($pdo, $id);
+			$favorite = Favorite::getFavoritebyFavoriteProductId($pdo, $id);
 			if($favorite === null) {
 				throw(new InvalidArgumentException("favorite does not exist", 404));
 			}
