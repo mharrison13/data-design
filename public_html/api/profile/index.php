@@ -94,6 +94,7 @@ try {
 			throw(new InvalidArgumentException("Product does not exist", 405));
 		}
 
+
 		// Make sure product price is accurate (optional field)
 		if(empty($requestObject->productPrice) === true) {
 			$requestObject->produntPrice = null;
