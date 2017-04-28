@@ -89,19 +89,19 @@ try {
 		$requestObject = json_decode($requestContent);
 		// This code will decode the JSON package and store it in the $requestObject
 
-		// Make sure the product is available (required field)
+		// Make sure the profile is available (required field)
 		if(empty($requestObject->ProductId) === true) {
-			throw(new InvalidArgumentException("Product does not exist", 405));
+			throw(new InvalidArgumentException("Profile does not exist", 405));
 		}
 
 
-		// Make sure product price is accurate (optional field)
-		if(empty($requestObject->productPrice) === true) {
-			$requestObject->produntPrice = null;
+		// Make sure profileId is accurate (optional field)
+		if(empty($requestObject->profileId) === true) {
+			$requestObject->profileId = null;
 		}
 
 		// Make sure profileId is available
-		if(empty($requestObject->productProfileId) === true) {
+		if(empty($requestObject->profileId) === true) {
 			throw(new InvalidArgumentException("No Profile Id", 405));
 		}
 
@@ -111,10 +111,10 @@ try {
 			//enforce that the end user has a XSRF token.
 			verifyXsrf();
 
-			// retrieve that product is up to date
-			$product = Product::getProductByProductProfileId($pdo, $id);
+			// retrieve that profile is up to date
+			$product = Profile::getProfileByProfileId($pdo, $id);
 			if($product === null) {
-				throw(new InvalidArgumentException("Product does not exist", 404));
+				throw(new InvalidArgumentException("Profile does not exist", 404));
 			}
 
 			//enforce the user is signed in and only trying to change their own product
@@ -122,9 +122,10 @@ try {
 				throw(new InvalidArgumentException("You are not allowed to edit this product", 403));
 			}
 
-			// update all products
-			$product->setProductPrice($requestObject->ProductPrice);
-			$product->setProductProfileId($requestObject->productProfileId);
+			// update all profile
+			$product->setProfileAtHandle($requestObject->productProfileId);
+			$product->setProfileEmail($requestObject->ProductPrice);
+			$product->setProductProfilePhone($requestObject->productProfileId);
 			#product->update($pdo);
 
 			// update reply
@@ -134,15 +135,15 @@ try {
 
 			//enforce the user is signed in
 			if(empty($_SESSION["profile"]) === true) {
-				throw(new InvalidArgumentException("you must be logged in to add a product", 403));
+				throw(new InvalidArgumentException("you must be logged in to create a profile", 403));
 			}
 
-			//create a product and insert it into the database
-			$Product = new Product(null, $requestObject->productProfileId, $requestObject->productPrice, null);
-			$Product->insert($pdo);
+			//create a profile and insert it into the database
+			$Profile = new Profile(null, $requestObject->profileAtHandle, $requestObject->profileEmail, $requestObject->profilePhone = null);
+			$Profile->insert($pdo);
 
 			//update reply
-			$reply->message = "product created OK";
+			$reply->message = "profile created OK";
 		}
 
 	} else if($method === "DELETE") {
@@ -150,15 +151,15 @@ try {
 		//enforce that the end user has a XSRF token.
 		verifyXsrf();
 
-		//retrieve the product to be deleted
-		$product = Product::getProductbyProductProfileId($pdo, $id);
-		if($product === null) {
-			throw(new InvalidArgumentException("product does not exist", 404));
+		//retrieve the profile to be deleted
+		$product = Profile::getProfilebyProfileId($pdo, $id);
+		if($profile === null) {
+			throw(new InvalidArgumentException("profile does not exist", 404));
 		}
 
 		//enforce the user is signed in and only trying to edit their own product
 		if(empty($_SESSION["profile"]) === true || $_SESSION["profile"]->getProductProfileId() !== $product->getProductProfileId()) {
-			throw(new InvalidArgumentException("you are not allowed to delete this product", 403));
+			throw(new InvalidArgumentException("you are not allowed to delete this profile", 403));
 		}
 
 		//delete product
