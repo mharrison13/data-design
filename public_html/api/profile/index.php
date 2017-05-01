@@ -90,19 +90,13 @@ try {
 		// This code will decode the JSON package and store it in the $requestObject
 
 		// Make sure the profile is available (required field)
-		if(empty($requestObject->ProductId) === true) {
+		if(empty($requestObject->ProfileId) === true) {
 			throw(new InvalidArgumentException("Profile does not exist", 405));
 		}
-
 
 		// Make sure profileId is accurate (optional field)
 		if(empty($requestObject->profileId) === true) {
 			$requestObject->profileId = null;
-		}
-
-		// Make sure profileId is available
-		if(empty($requestObject->profileId) === true) {
-			throw(new InvalidArgumentException("No Profile Id", 405));
 		}
 
 		//perform the actual put or post

@@ -54,7 +54,7 @@ try {
 
 		//get a specific product and update
 		if(empty($id) === false) {
-			$product - Product::getProductByProductProfileId($pdo, $id);
+			$product - Product::getProductByProductId($pdo, $id);
 			if($product !== null) {
 				$reply->data = $product;
 			}
@@ -64,7 +64,7 @@ try {
 				$reply->data = $product;
 			}
 		} else if(empty($productPrice) === false) {
-			$product = Product::getProductbyProductProfileId($pdo, $productPrice)->toArray();
+			$product = Product::getProductbyPriceId($pdo, $productPrice)->toArray();
 			if($product !== null) {
 				$reply->data = $product;
 			}
